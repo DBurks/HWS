@@ -7,6 +7,10 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
+# Copy the test ROM into the build output directory where tests execute
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/6502_functional_test.bin 
+     DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
 # Explicit target declaration
 add_executable(hws_tests test_cpu_core.cpp
   test_cpu_core_interrupts.cpp

@@ -11,7 +11,7 @@ TEST(MOS6502FunctionalTest, KlausDormannSuite) {
     CPUCore<KIM1_Config> test_cpu;
 
     // 1. Load the binary file into memory at $000A
-    std::ifstream file(TEST_ROM_PATH, std::ios::binary);
+    std::ifstream file("6502_functional_test.bin", std::ios::binary);
     ASSERT_TRUE(file.is_open()) << "Failed to open 6502_functional_test.bin!";
 
     std::vector<uint8_t> buffer((std::istreambuf_iterator<char>(file)),
