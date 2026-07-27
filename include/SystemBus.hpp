@@ -14,9 +14,12 @@ private:
     std::array<Data, 65536> memory{};
     bool irq_line_ = false;
     bool nmi_triggered_ = false;
+    bool exit_requested_ = false;
 
 public:
     FlatMemoryBus() { memory.fill(0); }
+
+    bool is_exit_requested() const { return exit_requested_; }
 
     inline Data read_raw(Addr address) {
         return memory[address];
@@ -32,11 +35,18 @@ public:
 
         // MMIO: Route writes to 0xF001 directly to terminal output
         if (address == 0xF001) {
-            std::cout << static_cast<char>(data) << std::flush;
-            return;
+            // Existing MMIO serial output (e.g., printing 'H', 'I', '\n')
+            std::cout << static_cast<char>(data);
+            std::cout.flush();
+        } 
+        else if (address == 0xF002) {
+            // Dedicated test exit trap
+            exit_requested_ = true;
         }
-
-        memory[address] = data;
+        else {
+            // Standard RAM / memory write
+            memory[address] = data;
+        }
     }
 
     inline void write_raw(Addr address, Data data) {
