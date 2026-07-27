@@ -1,0 +1,31 @@
+name: HWS CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake build-essential
+
+      - name: Configure CMake (Release)
+        run: cmake --preset release
+
+      - name: Build Project
+        run: cmake --build --preset release
+
+      - name: Run Smoke Test (test.bin)
+        run: |
+          # Use timeout to let the self-looping binary run, print "HI\n", and gracefully terminate the process
+          timeout 2s ./build/release/hws_sim test.bin 0400 || [ $? -eq 124 ]
