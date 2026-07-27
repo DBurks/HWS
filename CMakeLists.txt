@@ -30,6 +30,9 @@ target_link_libraries(hws_sim PRIVATE hws_core)
 # Guard compilation flags down to individual targets
 target_compile_options(hws_sim PRIVATE -Wall -Wextra -Wpedantic)
 
+# Add the Assembler tool directory
+add_subdirectory(tools/assembler)
+
 # 3. Handle testing scope isolation cleanly
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   enable_testing()
