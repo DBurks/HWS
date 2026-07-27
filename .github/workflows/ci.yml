@@ -25,7 +25,14 @@ jobs:
       - name: Build Project
         run: cmake --build --preset release
 
+      - name: Run Unit Tests
+        run: ctest --test-dir build/release --output-on-failure
+
       - name: Run Smoke Test (test.bin)
         run: |
-          # Use timeout to let the self-looping binary run, print "HI\n", and gracefully terminate the process
           timeout 2s ./build/release/hws_sim test.bin 0400 || [ $? -eq 124 ]
+
+      - name: Run Klaus Functional Test Suite
+        run: |
+          # Executes Klaus Dormann's test binary under release build with zero debug trace overhead
+          timeout 30s ./build/release/hws_sim tests/6502_functional.bin 0400 || [ $? -eq 124 ]
