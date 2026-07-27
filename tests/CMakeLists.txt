@@ -12,6 +12,11 @@ add_executable(hws_tests test_cpu_core.cpp
   test_cpu_core_interrupts.cpp
   test_klaus_functional.cpp)
 
+  # In your tests/CMakeLists.txt, right where your test executable is defined:
+target_compile_definitions(hws_tests PRIVATE 
+    TEST_ROM_PATH="${CMAKE_CURRENT_SOURCE_DIR}/6502_functional_test.bin"
+)
+
 # Target-based linking: automatically inherits include/ directories from hws_core
 target_link_libraries(hws_tests 
     PRIVATE 
