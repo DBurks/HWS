@@ -28,9 +28,13 @@ jobs:
       - name: Run Unit Tests
         run: ctest -V --test-dir build/release --output-on-failure
 
-      - name: Run Smoke Test (test.bin)
+      - name: Run E2E Smoke Test
         run: |
-          timeout 2s ./build/release/hws_sim test.bin 0400 || [ $? -eq 124 ]
+          # 1. Assemble a smoke test source file into a binary
+          ./build/release/tools/assembler/hws_asm tests/smoke.asm smoke.bin
+          
+          # 2. Execute the compiled binary on the simulator
+          ./build/release/hws_sim smoke.bin
 
       - name: Run Klaus Functional Test Suite
         run: |

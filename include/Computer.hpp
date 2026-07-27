@@ -57,7 +57,7 @@ public:
     // Run execution loop up to a maximum cycle count (0 = infinite)
     void run(uint64_t max_cycles = 0) {
         uint64_t executed_cycles = 0;
-        while (max_cycles == 0 || executed_cycles < max_cycles) {
+        while ((max_cycles == 0 || executed_cycles < max_cycles) && !bus_.is_exit_requested()) {
             uint32_t prev_cycles = cycles_;
             cpu_.step(bus_, cycles_);
             executed_cycles += (cycles_ - prev_cycles);
